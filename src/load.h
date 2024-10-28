@@ -1,9 +1,9 @@
 /********************************************************
  *                                                                     *
- *   The JIAJIA Software Distributed Shared Memory System              * 
+ *   The JIAJIA Software Distributed Shared Memory System              *
  *                                                                     *
- *   Copyright (C) 1997 the Center of High Performance Computing       * 
- *   of Institute of Computing Technology, Chinese Academy of          *      
+ *   Copyright (C) 1997 the Center of High Performance Computing       *
+ *   of Institute of Computing Technology, Chinese Academy of          *
  *   Sciences.  All rights reserved.                                   *
  *                                                                     *
  *   Permission to use, copy, modify and distribute this software      *
@@ -18,27 +18,27 @@
  *                                                                     *
  *   This program is distributed in the hope that it will be useful,   *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of    *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.              * 
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.              *
  *                                                                     *
  *   Center of High Performance Computing requests users of this       *
- *   software to return to dsm@water.chpc.ict.ac.cn any                * 
- *   improvements that they make and grant CHPC redistribution rights. *    
- *                                                                     * 
- *         Author: Weiwu Hu, Weisong Shi, Zhimin Tang                  *      
+ *   software to return to dsm@water.chpc.ict.ac.cn any                *
+ *   improvements that they make and grant CHPC redistribution rights. *
+ *                                                                     *
+ *         Author: Weiwu Hu, Weisong Shi, Zhimin Tang                  *
  **********************************************************************/
 
 #ifndef JIALOAD_H
 #define JIALOAD_H
 
 #include "global.h"
-#define  Lperiod   120
-#define  Delta     0.05
+#define Lperiod 120
+#define Delta 0.05
 
 typedef struct loadtype {
-        float power;
-        float  time;
-        int    begin;
-        int    end; 
+  float power;
+  float time;
+  int begin;
+  int end;
 } jiaload_t;
 
 #endif /*JIAMEM_H*/
