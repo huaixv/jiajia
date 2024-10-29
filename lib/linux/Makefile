@@ -3,8 +3,8 @@
 #*********************************************************
 
 ARCH = linux
-ARCH_FLAGS = -DLINUX
-CPPFLAGS = -O2 
+ARCH_FLAGS = -DLINUX -D_GNU_SOURCE
+CPPFLAGS = -O2 -std=gnu89
 
 
 include ../Makefile.common
