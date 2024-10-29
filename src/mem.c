@@ -73,6 +73,7 @@ void sigsegv_handler();
 #endif /* AIX41 || IRIX62 */
 
 #ifdef LINUX
+#include <ucontext.h>
 void sigsegv_handler(int, struct sigcontext);
 #endif
 
