@@ -10,7 +10,7 @@ JIALIB = ../../../lib/$(ARCH)
 
 %.d:%.c 
 	@echo "Creating $@..."
-	@$(SHELL) -ec "$(CC) $(CPPFLAGS) $< | sed ' s/$*\.o/& $@/g' > $@"
+	@$(SHELL) -ec "$(CC) -MM $(CPPFLAGS) $< | sed ' s/$*\.o/& $@/g' > $@"
 
 TARGET 	= mat
 
