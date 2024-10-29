@@ -74,7 +74,7 @@ void sigsegv_handler();
 
 #ifdef LINUX
 #include <ucontext.h>
-void sigsegv_handler(int, struct sigcontext);
+void sigsegv_handler(int, siginfo_t*, ucontext_t*);
 #endif
 
 void getpserver(jia_msg_t *req);
@@ -166,9 +166,9 @@ void initmem() {
   jiamapfd = open("/dev/zero", O_RDWR, 0);
   {
     struct sigaction act;
-    act.sa_handler = (void_func_handler)sigsegv_handler;
+    act.sa_sigaction = (void_func_handler)sigsegv_handler;
     sigemptyset(&act.sa_mask);
-    act.sa_flags = SA_NOMASK;
+    act.sa_flags = SA_NOMASK | SA_SIGINFO;
     if (sigaction(SIGSEGV, &act, NULL))
       assert0(0, "segv sigaction problem");
   }
@@ -450,7 +450,7 @@ void sigsegv_handler(int signo, siginfo_t *sip, ucontext_t *uap)
 #endif
 
 #ifdef LINUX
-        void sigsegv_handler(int signo, struct sigcontext sigctx)
+        void sigsegv_handler(int signo, siginfo_t *siginfo, ucontext_t *ctx)
 #endif
 {
   address_t faultaddr;
@@ -489,9 +489,9 @@ void sigsegv_handler(int signo, siginfo_t *sip, ucontext_t *uap)
 #endif
 
 #ifdef LINUX
-  faultaddr = (address_t)sigctx.cr2;
+  faultaddr = (address_t)siginfo->si_addr;
   faultaddr = (address_t)((unsigned long)faultaddr / Pagesize * Pagesize);
-  writefault = (int)sigctx.err & 2;
+  writefault = ctx->uc_mcontext.gregs[REG_ERR] & 0x2;
 #endif
 
   sprintf(errstr,
