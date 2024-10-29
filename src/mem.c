@@ -494,9 +494,9 @@ void sigsegv_handler(int signo, siginfo_t *sip, ucontext_t *uap)
 #endif
 
   sprintf(errstr,
-          "Access shared memory out of range from 0x%x to 0x%x!,
-          faultaddr = 0x % x,
-          writefault = 0x % x ",
+          "Access shared memory out of range from 0x%x to 0x%x!,"
+          "faultaddr = 0x%x,"
+          "writefault = 0x%x ",
                        Startaddr,
           Startaddr + globaladdr, faultaddr, writefault);
   assert((((unsigned long)faultaddr < (Startaddr + globaladdr)) &&
