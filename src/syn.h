@@ -38,6 +38,8 @@
 #ifndef JIASYN_H
 #define JIASYN_H
 
+#include "global.h"
+
 #define Maxwtnts 511 /*(4096-8)/4/2*/
 #define Maxstacksize 8
 #define hidelock Maxlocks
