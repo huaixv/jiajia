@@ -4,7 +4,7 @@
 
 CC  = gcc
 CCC = gcc
-FC = f77
+FC = gfortran
 
 SRC	= ../../src
 CFLAGS	= -I./${SRC} $(ARCH_FLAGS)  -DDOSTAT 
