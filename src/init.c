@@ -39,6 +39,7 @@
 #include "init.h"
 #include "global.h"
 #include "mem.h"
+#include "libgen.h"
 
 extern void initmem();
 extern void initsyn();
@@ -247,7 +248,10 @@ int startprocs(int argc, char **argv) {
     strcat(cmd, hostname);
     strcat(cmd, " ");
     for (i = 0; i < argc; i++) {
-      strcat(cmd, argv[i]);
+      char *argv_dup = strdup(argv[i]);
+      char *prog_name = basename(argv_dup);
+      strcat(cmd, "./");
+      strcat(cmd, prog_name);
       strcat(cmd, " ");
     }
 
