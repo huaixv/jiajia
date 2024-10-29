@@ -3,9 +3,9 @@
 #*********************************************************
 
 CC = gcc
-CFLAGS = 
 
 ARCH = linux
+CFLAGS = -std=c89
 LDFLAGS = -lm -lbsd
 
 include ../Makefile.common
