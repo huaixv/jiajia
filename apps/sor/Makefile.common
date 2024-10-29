@@ -12,7 +12,7 @@ JIALIB = ../../../lib/$(ARCH)
 	@echo "Creating $@..."
 	@$(SHELL) -ec "$(CC) -MM $(CPPFLAGS) $< | sed ' s/$*\.o/& $@/g' > $@"
 
-TARGET 	= sor
+TARGET 	= SOR.$(ARCH)
 
 $(TARGET):$(OBJS) $(JIALIB)/libjia.a
 	$(CC) $(CFLAGS) -o $@ $(OBJS) -L$(JIALIB) -ljia $(LDFLAGS)
