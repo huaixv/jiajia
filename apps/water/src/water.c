@@ -109,7 +109,7 @@ char **argv;
 	exit(-1);
     }
     jia_init(argc, argv);
-    jia_config(WVEC,ON2);
+    jia_config(WVEC,ONE);
     
 
     printf("Using %d procs on %d steps of %d mols\n", jiahosts, NSTEP, NMOL);
