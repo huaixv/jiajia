@@ -5,7 +5,7 @@
 CC = gcc
 CFLAGS = 
 
-ARCH = aix41
-LDFLAGS = -lm -lbsd 
+ARCH = linux
+LDFLAGS = -lm -lbsd
 
 include ../Makefile.common

@@ -5,7 +5,7 @@
 CC     = cc
 #CFLAGS = -dn
 
-ARCH = solaris
-LDFLAGS = -lnsl -lsocket -L/usr/ucblib -lcurses -lucb -lm
+ARCH = linux
+LDFLAGS = -lnsl -L/usr/ucblib -lcurses -lm
 
 include ../Makefile.common

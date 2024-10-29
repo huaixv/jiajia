@@ -2,7 +2,7 @@
 #  Platform dependent rules and defines...
 #*********************************************************
 
-ARCH = solaris
-LDFLAGS = -lnsl -lsocket -L/usr/ucblib -lcurses -lucb -lm
+ARCH = linux
+LDFLAGS = -lnsl -L/usr/ucblib -lcurses -lm
 
 include ../Makefile.common
