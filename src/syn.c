@@ -72,8 +72,8 @@ void sendwtnts(int operation);
 void popstack();
 void jia_unlock(int lock);
 void jia_barrier();
-void grantlock(long lock, int toproc, int acqscope);
-void grantbarr(long lock);
+void grantlock(int lock, int toproc, int acqscope);
+void grantbarr(int lock);
 void acqserver(jia_msg_t *req);
 void relserver(jia_msg_t *req);
 void grantbarr();
@@ -578,7 +578,7 @@ wtnt_t *appendlockwtnts(jia_msg_t *msg, wtnt_t *ptr, int acqscope) {
   return (wnptr);
 }
 
-void grantlock(long lock, int toproc, int acqscope) {
+void grantlock(int lock, int toproc, int acqscope) {
   jia_msg_t *grant;
   wtnt_t *wnptr;
 
@@ -607,7 +607,7 @@ void grantlock(long lock, int toproc, int acqscope) {
 }
 
 void acqserver(jia_msg_t *req) {
-  long lock;
+  int lock;
   int wtnti;
 
   assert((req->op == ACQ) && (req->topid == jia_pid), "Incorrect ACQ message!");
@@ -624,7 +624,7 @@ void acqserver(jia_msg_t *req) {
 }
 
 void relserver(jia_msg_t *req) {
-  long lock;
+  int lock;
   int acqi;
 
   assert((req->op == REL) && (req->topid == jia_pid), "Incorrect REL Message!");
@@ -684,7 +684,7 @@ void broadcast(jia_msg_t *msg) {
   }
 }
 
-void grantbarr(long lock) {
+void grantbarr(int lock) {
   jia_msg_t *grant;
   wtnt_t *wnptr;
   int hosti;
@@ -715,7 +715,7 @@ void grantbarr(long lock) {
 }
 
 void barrserver(jia_msg_t *req) {
-  long lock;
+  int lock;
 
   assert((req->op == BARR) && (req->topid == jia_pid),
          "Incorrect BARR Message!");

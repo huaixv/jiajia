@@ -709,6 +709,7 @@ unsigned long s2l(unsigned char *str) {
     unsigned char c[Intbytes];
   } notype;
 
+  notype.l = 0;
   notype.c[0] = str[0];
   notype.c[1] = str[1];
   notype.c[2] = str[2];
