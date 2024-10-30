@@ -73,7 +73,7 @@ void sigsegv_handler();
 #endif /* AIX41 || IRIX62 */
 
 #ifdef LINUX
-void sigsegv_handler(int, struct sigcontext_struct);
+void sigsegv_handler(int, struct sigcontext);
 #endif
 
 void getpserver(jia_msg_t *req);
@@ -449,7 +449,7 @@ void sigsegv_handler(int signo, siginfo_t *sip, ucontext_t *uap)
 #endif
 
 #ifdef LINUX
-        void sigsegv_handler(int signo, struct sigcontext_struct sigctx)
+        void sigsegv_handler(int signo, struct sigcontext sigctx)
 #endif
 {
   address_t faultaddr;
