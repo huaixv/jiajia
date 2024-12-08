@@ -5,10 +5,10 @@
 CPPFLAGS = -I../../../src -O2
 
 OBJS 	= mm.o
-VPATH = ../src 
+VPATH = ../src
 JIALIB = ../../../lib/$(ARCH)
 
-%.d:%.c 
+%.d:%.c
 	@echo "Creating $@..."
 	@$(SHELL) -ec "$(CC) -MM $(CPPFLAGS) $< | sed ' s/$*\.o/& $@/g' > $@"
 

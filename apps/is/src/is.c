@@ -204,7 +204,7 @@ void    main (int argc, char **argv)
                   break;
           }
 
-  if (!N) N=1<<22;
+  if (!N) N=1<<14;
   
   jia_init(argc, argv);
   /* Initialize shared memory */
@@ -263,7 +263,7 @@ void    main (int argc, char **argv)
 	       (time2.tv_usec - time1.tv_usec)) * 1.0e-6);
     }
 
-/* #define FULL_VERIFICATION */
+#define FULL_VERIFICATION
 /*
   Full verification is horrendously slow and should never be done
   once the correctness of the program has been established.
@@ -329,6 +329,7 @@ void    main (int argc, char **argv)
 	{
 	  if (global->last[i] > global->first[i+1])
 	    {
+                jprintf("failed key\n");
 	      fprintf(stderr,"key[%d]%d, key[%d]%d\n", 
 		      count*(i+1), global->first[i+1], 
 		      count*(i+1)-1, global->last[i]);

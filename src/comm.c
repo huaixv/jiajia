@@ -46,13 +46,13 @@
     sigaddset(&newmask, SIGIO);                                                \
     sigprocmask(SIG_BLOCK, &newmask, &oldmask);                                \
     oldsigiomask = sigismember(&oldmask, SIGIO);                               \
-    printf("Enter CS");                                                        \
+    jprintf("Enter CS\n");                                                     \
   }
 #define ENDCS                                                                  \
   {                                                                            \
     if (oldsigiomask == 0)                                                     \
       enable_sigio();                                                          \
-    printf("Exit CS\n");                                                       \
+    jprintf("Exit CS\n");                                                      \
   }
 
 #ifndef JIA_DEBUG
@@ -139,6 +139,7 @@ int oldsigiomask;
 
 /*---------------------------------------------------------*/
 int req_fdcreate(int i, int flag) {
+  jprintf("i=%d, flag=%d\n", i, flag);
   int fd, res;
   int size;
   struct sockaddr_in addr;
@@ -159,6 +160,7 @@ int req_fdcreate(int i, int flag) {
   addr.sin_family = AF_INET;
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = (flag) ? htons(0) : htons(reqports[jia_pid][i]);
+  jprintf("req_fdcreate()-->port=%d\n", ntohs(addr.sin_port));
 
   res = bind(fd, (struct sockaddr *)&addr, sizeof(addr));
   assert0((res == 0), "req_fdcreate()-->bind()");
@@ -167,6 +169,7 @@ int req_fdcreate(int i, int flag) {
 
 /*------------------------------------------------------------*/
 int rep_fdcreate(int i, int flag) {
+  jprintf("i=%d, flag=%d\n", i, flag);
   int fd, res;
 #ifdef SOLARIS
   int size;
@@ -189,6 +192,7 @@ int rep_fdcreate(int i, int flag) {
   addr.sin_family = AF_INET;
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = (flag) ? htons(0) : htons(repports[jia_pid][i]);
+  jprintf("rep_fdcreate()-->port=%d\n", ntohs(addr.sin_port));
 
   res = bind(fd, (struct sockaddr *)&addr, sizeof(addr));
   assert0((res == 0), "rep_fdcreate()-->bind()");
@@ -241,6 +245,7 @@ void initcomm() {
 
     act.sa_handler = (void_func_handler)sigio_handler;
     sigemptyset(&act.sa_mask);
+    act.sa_flags = SA_NOMASK;
     if (sigaction(SIGIO, &act, NULL))
       assert0(0, "initcomm()-->sigaction()");
 
@@ -346,87 +351,113 @@ void initcomm() {
 
 /*----------------------------------------------------------*/
 void msgserver() {
+  // jprintf("\n");
   SPACE(1);
   printf("Enterservermsg[%d],inc=%d,inh=%d,int=%d!\n", inqh.op, incount, inhead,
          intail);
   switch (inqh.op) {
   case REL:
+  // jprintf("\n");
     relserver(&inqh);
     break;
   case JIAEXIT:
+  // jprintf("\n");
     jiaexitserver(&inqh);
     break;
   case BARR:
+  // jprintf("\n");
     barrserver(&inqh);
     break;
   case WTNT:
+  // jprintf("\n");
     wtntserver(&inqh);
     break;
   case BARRGRANT:
+  // jprintf("\n");
     barrgrantserver(&inqh);
     break;
   case ACQGRANT:
+  // jprintf("\n");
     acqgrantserver(&inqh);
     break;
   case ACQ:
+  // jprintf("\n");
     acqserver(&inqh);
     break;
   case INVLD:
+  // jprintf("\n");
     invserver(&inqh);
     break;
   case WAIT:
+  // jprintf("\n");
     waitserver(&inqh);
     break;
   case WAITGRANT:
+  // jprintf("\n");
     waitgrantserver(&inqh);
     break;
   case GETP:
+  // jprintf("\n");
     getpserver(&inqh);
     break;
   case GETPGRANT:
+  // jprintf("\n");
     getpgrantserver(&inqh);
     break;
   case DIFF:
+  // jprintf("\n");
     diffserver(&inqh);
     break;
   case DIFFGRANT:
+  // jprintf("\n");
     diffgrantserver(&inqh);
     break;
   case SETCV:
+  // jprintf("\n");
     setcvserver(&inqh);
     break;
   case RESETCV:
+  // jprintf("\n");
     resetcvserver(&inqh);
     break;
   case WAITCV:
+  // jprintf("\n");
     waitcvserver(&inqh);
     break;
   case CVGRANT:
+  // jprintf("\n");
     cvgrantserver(&inqh);
     break;
   case MSGBODY:
   case MSGTAIL:
+  // jprintf("\n");
     msgrecvserver(&inqh);
     break;
   case LOADREQ:
+  // jprintf("\n");
     loadserver(&inqh);
     break;
   case LOADGRANT:
+  // jprintf("\n");
     loadgrantserver(&inqh);
     break;
 #ifdef DOSTAT
   case STAT:
+  // jprintf("\n");
     statserver(&inqh);
     break;
   case STATGRANT:
+  // jprintf("\n");
     statgrantserver(&inqh);
     break;
 #endif
 
   default:
     if (inqh.op >= BCAST) {
+  // jprintf("\n");
       bcastserver(&inqh);
     } else {
+  // jprintf("\n");
       printmsg(&inqh, 1);
       assert0(0, "msgserver(): Incorrect Message!");
     }
@@ -449,6 +480,7 @@ void sigio_handler(int sig, siginfo_t *sip, ucontext_t *uap)
         void sigio_handler()
 #endif
 {
+  jprintf("\n");
   int res, len, oldindex;
   int i, s;
   fd_set readfds;
@@ -457,9 +489,11 @@ void sigio_handler(int sig, siginfo_t *sip, ucontext_t *uap)
   int servemsg;
   int testresult;
 
+  jprintf("\n");
 #ifdef DOSTAT
   register unsigned int begin;
   if (statflag == 1) {
+  jprintf("\n");
     jiastat.sigiocnt++;
     if (interruptflag == 0) {
       begin = get_usecs();
@@ -475,14 +509,18 @@ void sigio_handler(int sig, siginfo_t *sip, ucontext_t *uap)
   }
 #endif
 
+  jprintf("\n");
   SPACE(1);
   printf("Enter sigio_handler!\n");
 
+  jprintf("\n");
   servemsg = 0;
   readfds = commreq.rcv_set;
   polltime.tv_sec = 0;
   polltime.tv_usec = 0;
+  jprintf("\n");
   res = select(commreq.rcv_maxfd, &readfds, NULL, NULL, &polltime);
+  jprintf("\n");
   while (res > 0) {
     for (i = 0; i < hostc; i++)
       if (i != jia_pid)
@@ -490,6 +528,7 @@ void sigio_handler(int sig, siginfo_t *sip, ucontext_t *uap)
           assert0((incount < Maxqueue), "sigio_handler(): Inqueue exceeded!");
 
           s = sizeof(from);
+  jprintf("\n");
           res = recvfrom(commreq.rcv_fds[i], (char *)&(inqt),
                          Maxmsgsize + Msgheadsize, 0, (struct sockaddr *)&from,
                          &s);
@@ -500,6 +539,7 @@ void sigio_handler(int sig, siginfo_t *sip, ucontext_t *uap)
                  hosts[inqt.frompid].addrlen);
           to.sin_port = htons(repports[inqt.frompid][inqt.topid]);
 
+  jprintf("\n");
           res =
               sendto(commrep.snd_fds[i], (char *)&(inqt.seqno),
                      sizeof(inqt.seqno), 0, (struct sockaddr *)&to, sizeof(to));
@@ -532,6 +572,7 @@ void sigio_handler(int sig, siginfo_t *sip, ucontext_t *uap)
             jiastat.resentcnt++;
           }
         }
+  jprintf("\n");
     readfds = commreq.rcv_set;
     polltime.tv_sec = 0;
     polltime.tv_usec = 0;
@@ -541,6 +582,7 @@ void sigio_handler(int sig, siginfo_t *sip, ucontext_t *uap)
   SPACE(1);
   printf("Finishrecvmsg!inc=%d,inh=%d,int=%d\n", incount, inhead, intail);
 
+  jprintf("\n");
   enable_sigio();
   while (servemsg == 1) {
     msgserver();
@@ -553,6 +595,7 @@ void sigio_handler(int sig, siginfo_t *sip, ucontext_t *uap)
   }
 
   SPACE(1);
+  jprintf("\n");
   printf("Out sigio_handler!\n");
 #ifdef DOSTAT
   if (statflag == 1) {
@@ -567,6 +610,7 @@ void sigio_handler(int sig, siginfo_t *sip, ucontext_t *uap)
       }
     }
   }
+  jprintf("\n");
 #endif DOSTAT
 }
 
@@ -585,6 +629,8 @@ void asendmsg(jia_msg_t *msg) {
   }
 #endif
 
+// jprintf("op=%s from %d to %d\n", strop(msg->op), msg->frompid, msg->topid);
+
   printf("Enter asendmsg! outc=%d, outh=%d, outt=%d\n", outcount, outhead,
          outtail);
 
@@ -594,6 +640,7 @@ void asendmsg(jia_msg_t *msg) {
   commreq.snd_seq[msg->topid]++;
   outqt.seqno = commreq.snd_seq[msg->topid];
   outcount++;
+  // // jprintf("asendmsg++: outc=%d, outh=%d, outt=%d\n", outcount, outhead, outtail);
   outtail = (outtail + 1) % Maxqueue;
   outsendmsg = (outcount == 1) ? 1 : 0;
   ENDCS;
@@ -603,6 +650,8 @@ void asendmsg(jia_msg_t *msg) {
     BEGINCS;
     outhead = (outhead + 1) % Maxqueue;
     outcount--;
+    // // jprintf("asendmsg--: outc=%d, outh=%d, outt=%d\n", outcount, outhead,
+            // outtail);
     outsendmsg = (outcount > 0) ? 1 : 0;
     ENDCS;
   }
@@ -617,6 +666,7 @@ void asendmsg(jia_msg_t *msg) {
 }
 
 void outsend() {
+  jprintf("\n");
   int res, toproc, fromproc;
   struct sockaddr_in to, from;
   int rep;
@@ -681,6 +731,7 @@ void outsend() {
 
     while ((retries_num < MAX_RETRIES) && (sendsuccess != 1)) {
       BEGINCS;
+  jprintf("\n");
       res = sendto(commreq.snd_fds[toproc], (char *)&(outqh), msgsize, 0,
                    (struct sockaddr *)&to, sizeof(to));
       assert0((res != -1), "outsend()-->sendto()");
@@ -691,18 +742,21 @@ void outsend() {
       end = start + TIMEOUT;
 
       while ((jia_current_time() < end) && (arrived != 1)) {
+  jprintf("\n");
         FD_ZERO(&readfds);
         FD_SET(commrep.rcv_fds[toproc], &readfds);
         polltime.tv_sec = 0;
-        polltime.tv_usec = 0;
+        polltime.tv_usec = 1000000;
         res = select(commrep.rcv_maxfd, &readfds, NULL, NULL, &polltime);
         if (FD_ISSET(commrep.rcv_fds[toproc], &readfds) != 0)
           arrived = 1;
       }
 
       if (arrived == 1) {
+  jprintf("\n");
       recv_again:
         s = sizeof(from);
+  jprintf("\n");
         res = recvfrom(commrep.rcv_fds[toproc], (char *)&rep, Intbytes, 0,
                        (struct sockaddr *)&from, &s);
         if ((res < 0) && (errno == EINTR))
@@ -713,8 +767,10 @@ void outsend() {
 
       retries_num++;
     }
+  jprintf("\n");
 
     if (sendsuccess != 1) {
+  jprintf("\n");
       sprintf(errstr, "Can't asend message(%d,%d) to host %d!", outqh.op,
               outqh.seqno, toproc);
       printf("BUFFER SIZE %d(%d)\n", outqh.size, msgsize);
@@ -746,6 +802,7 @@ void bsendmsg(jia_msg_t *msg) {
 }
 
 void bcastserver(jia_msg_t *msg) {
+  // // jprintf("\n");
   int mypid, child1, child2;
   int rootlevel, root, level;
 

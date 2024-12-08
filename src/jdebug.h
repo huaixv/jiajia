@@ -1,0 +1,38 @@
+#pragma once
+
+#include <unistd.h>
+#define jprintf(args...)
+
+
+#ifndef jprintf
+#define jprintf(fmt, args...)                                                  \
+  do {                                                                         \
+    char buf[1024];                                                            \
+    char hostname[80];                                                         \
+    gethostname(hostname, 80);                                                 \
+    int len = sprintf(buf, "%s %s:%d %s " fmt, hostname, __FILE__, __LINE__,   \
+                      __func__, ##args);                                       \
+    write(STDERR_FILENO, buf, len);                                            \
+  } while (0)
+
+#endif
+
+#include <execinfo.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define print_trace()                                                          \
+  do {                                                                         \
+    void *array[10];                                                           \
+    char **strings;                                                            \
+    int size, i;                                                               \
+    size = backtrace(array, 10);                                               \
+    strings = backtrace_symbols(array, size);                                  \
+    if (strings != NULL) {                                                     \
+      printf("Obtained %d stack frames.\n", size);                             \
+      for (i = 0; i < size; i++)                                               \
+        printf("%s\n", strings[i]);                                            \
+    }                                                                          \
+                                                                               \
+    free(strings);                                                             \
+  } while (0)

@@ -38,17 +38,21 @@
 #ifndef JIAGLOBAL_H
 #define JIAGLOBAL_H
 
+#include "jdebug.h"
+
 #ifndef Maxhosts
 #define Maxhosts 16
 #endif
 #define Maxlocks 64
-#define Intbytes 4
-#define Intbits 32
+#define Intbytes (sizeof(int))
+#define Intbits (8 * Intbytes)
+#define Ptrbytes (sizeof(void *))
+#define Ptrbits (8 * Ptrbytes)
 #define Pagesize 4096
 #ifndef Cachepages
 #define Cachepages 1024
 #endif
-#define Startaddr 0x60000000
+#define Startaddr 0x10000000
 #define Maxmemsize 0x8000000
 #define Maxmempages (Maxmemsize / Pagesize)
 
@@ -130,5 +134,11 @@ typedef void (*void_func_handler)();
     if ((right) == 1)                                                          \
       printf("\t\t\t");                                                        \
   }
+
+#define appendmsg(req, data, len)                                              \
+  do {                                                                         \
+    doappendmsg(req, (unsigned char *)(data), len);                            \
+  } while (0)
+    // _Static_assert(sizeof(*(data)) == len);                                    \
 
 #endif /* JIAGLOBAL_H */

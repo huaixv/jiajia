@@ -1,0 +1,516 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "intraf.o",
+      "../src/intraf.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/intraf.c",
+    "output": "/home/pc/jiajia/apps/water/linux/intraf.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "initia.o",
+      "../src/initia.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/initia.c",
+    "output": "/home/pc/jiajia/apps/water/linux/initia.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "cnstnt.o",
+      "../src/cnstnt.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/cnstnt.c",
+    "output": "/home/pc/jiajia/apps/water/linux/cnstnt.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "interf.o",
+      "../src/interf.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/interf.c",
+    "output": "/home/pc/jiajia/apps/water/linux/interf.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "bndry.o",
+      "../src/bndry.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/bndry.c",
+    "output": "/home/pc/jiajia/apps/water/linux/bndry.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "cshift.o",
+      "../src/cshift.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/cshift.c",
+    "output": "/home/pc/jiajia/apps/water/linux/cshift.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "kineti.o",
+      "../src/kineti.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/kineti.c",
+    "output": "/home/pc/jiajia/apps/water/linux/kineti.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "water.o",
+      "../src/water.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/water.c",
+    "output": "/home/pc/jiajia/apps/water/linux/water.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "redsync.o",
+      "../src/redsync.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/redsync.c",
+    "output": "/home/pc/jiajia/apps/water/linux/redsync.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "predcor.o",
+      "../src/predcor.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/predcor.c",
+    "output": "/home/pc/jiajia/apps/water/linux/predcor.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "poteng.o",
+      "../src/poteng.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/poteng.c",
+    "output": "/home/pc/jiajia/apps/water/linux/poteng.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-c",
+      "-o",
+      "syscns.o",
+      "../src/syscns.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/water/linux",
+    "file": "/home/pc/jiajia/apps/water/src/syscns.c",
+    "output": "/home/pc/jiajia/apps/water/linux/syscns.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-g",
+      "-c",
+      "-o",
+      "read_tsp.o",
+      "../src/read_tsp.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/tsp/linux",
+    "file": "/home/pc/jiajia/apps/tsp/src/read_tsp.c",
+    "output": "/home/pc/jiajia/apps/tsp/linux/read_tsp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-g",
+      "-c",
+      "-o",
+      "pq.o",
+      "../src/pq.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/tsp/linux",
+    "file": "/home/pc/jiajia/apps/tsp/src/pq.c",
+    "output": "/home/pc/jiajia/apps/tsp/linux/pq.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-g",
+      "-c",
+      "-o",
+      "solve.o",
+      "../src/solve.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/tsp/linux",
+    "file": "/home/pc/jiajia/apps/tsp/src/solve.c",
+    "output": "/home/pc/jiajia/apps/tsp/linux/solve.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-g",
+      "-c",
+      "-o",
+      "tsp.o",
+      "../src/tsp.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/tsp/linux",
+    "file": "/home/pc/jiajia/apps/tsp/src/tsp.c",
+    "output": "/home/pc/jiajia/apps/tsp/linux/tsp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-Wno-implicit-int",
+      "-Wno-implicit-function-declaration",
+      "-g",
+      "-c",
+      "-o",
+      "tours.o",
+      "../src/tours.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/tsp/linux",
+    "file": "/home/pc/jiajia/apps/tsp/src/tours.c",
+    "output": "/home/pc/jiajia/apps/tsp/linux/tours.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-I../../../src",
+      "-O2",
+      "-c",
+      "-o",
+      "pi.o",
+      "../src/pi.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/pi/linux",
+    "file": "/home/pc/jiajia/apps/pi/src/pi.c",
+    "output": "/home/pc/jiajia/apps/pi/linux/pi.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I../../../src",
+      "-O2",
+      "-c",
+      "-o",
+      "mm.o",
+      "../src/mm.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/mm/linux",
+    "file": "/home/pc/jiajia/apps/mm/src/mm.c",
+    "output": "/home/pc/jiajia/apps/mm/linux/mm.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I../../../src",
+      "-c",
+      "-o",
+      "lu.o",
+      "../src/lu.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/lu/linux",
+    "file": "/home/pc/jiajia/apps/lu/src/lu.c",
+    "output": "/home/pc/jiajia/apps/lu/linux/lu.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-std=gnu89",
+      "-I../../../src",
+      "-O2",
+      "-DMEDIUM",
+      "-c",
+      "-o",
+      "is.o",
+      "../src/is.c"
+    ],
+    "directory": "/home/pc/jiajia/apps/is/linux",
+    "file": "/home/pc/jiajia/apps/is/src/is.c",
+    "output": "/home/pc/jiajia/apps/is/linux/is.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gfortran",
+      "-c",
+      "./../../src/finit.f"
+    ],
+    "directory": "/home/pc/jiajia/lib/linux",
+    "file": "/home/pc/jiajia/src/finit.f"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I./../../src",
+      "-DLINUX",
+      "-D_POSIX_C_SOURCE=199309L",
+      "-D_GNU_SOURCE",
+      "-DDOSTAT",
+      "-std=gnu89",
+      "-g",
+      "-c",
+      "-o",
+      "init.o",
+      "./../../src/init.c"
+    ],
+    "directory": "/home/pc/jiajia/lib/linux",
+    "file": "/home/pc/jiajia/src/init.c",
+    "output": "/home/pc/jiajia/lib/linux/init.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I./../../src",
+      "-DLINUX",
+      "-D_POSIX_C_SOURCE=199309L",
+      "-D_GNU_SOURCE",
+      "-DDOSTAT",
+      "-std=gnu89",
+      "-g",
+      "-c",
+      "-o",
+      "tools.o",
+      "./../../src/tools.c"
+    ],
+    "directory": "/home/pc/jiajia/lib/linux",
+    "file": "/home/pc/jiajia/src/tools.c",
+    "output": "/home/pc/jiajia/lib/linux/tools.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I./../../src",
+      "-DLINUX",
+      "-D_POSIX_C_SOURCE=199309L",
+      "-D_GNU_SOURCE",
+      "-DDOSTAT",
+      "-std=gnu89",
+      "-g",
+      "-c",
+      "-o",
+      "syn.o",
+      "./../../src/syn.c"
+    ],
+    "directory": "/home/pc/jiajia/lib/linux",
+    "file": "/home/pc/jiajia/src/syn.c",
+    "output": "/home/pc/jiajia/lib/linux/syn.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I./../../src",
+      "-DLINUX",
+      "-D_POSIX_C_SOURCE=199309L",
+      "-D_GNU_SOURCE",
+      "-DDOSTAT",
+      "-std=gnu89",
+      "-g",
+      "-c",
+      "-o",
+      "exit.o",
+      "./../../src/exit.c"
+    ],
+    "directory": "/home/pc/jiajia/lib/linux",
+    "file": "/home/pc/jiajia/src/exit.c",
+    "output": "/home/pc/jiajia/lib/linux/exit.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I./../../src",
+      "-DLINUX",
+      "-D_POSIX_C_SOURCE=199309L",
+      "-D_GNU_SOURCE",
+      "-DDOSTAT",
+      "-std=gnu89",
+      "-g",
+      "-c",
+      "-o",
+      "mem.o",
+      "./../../src/mem.c"
+    ],
+    "directory": "/home/pc/jiajia/lib/linux",
+    "file": "/home/pc/jiajia/src/mem.c",
+    "output": "/home/pc/jiajia/lib/linux/mem.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I./../../src",
+      "-DLINUX",
+      "-D_POSIX_C_SOURCE=199309L",
+      "-D_GNU_SOURCE",
+      "-DDOSTAT",
+      "-std=gnu89",
+      "-g",
+      "-c",
+      "-o",
+      "comm.o",
+      "./../../src/comm.c"
+    ],
+    "directory": "/home/pc/jiajia/lib/linux",
+    "file": "/home/pc/jiajia/src/comm.c",
+    "output": "/home/pc/jiajia/lib/linux/comm.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I./../../src",
+      "-DLINUX",
+      "-D_POSIX_C_SOURCE=199309L",
+      "-D_GNU_SOURCE",
+      "-DDOSTAT",
+      "-std=gnu89",
+      "-g",
+      "-c",
+      "-o",
+      "get.o",
+      "./../../src/get.c"
+    ],
+    "directory": "/home/pc/jiajia/lib/linux",
+    "file": "/home/pc/jiajia/src/get.c",
+    "output": "/home/pc/jiajia/lib/linux/get.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I./../../src",
+      "-DLINUX",
+      "-D_POSIX_C_SOURCE=199309L",
+      "-D_GNU_SOURCE",
+      "-DDOSTAT",
+      "-std=gnu89",
+      "-g",
+      "-c",
+      "-o",
+      "msg.o",
+      "./../../src/msg.c"
+    ],
+    "directory": "/home/pc/jiajia/lib/linux",
+    "file": "/home/pc/jiajia/src/msg.c",
+    "output": "/home/pc/jiajia/lib/linux/msg.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I./../../src",
+      "-DLINUX",
+      "-D_POSIX_C_SOURCE=199309L",
+      "-D_GNU_SOURCE",
+      "-DDOSTAT",
+      "-std=gnu89",
+      "-g",
+      "-c",
+      "-o",
+      "load.o",
+      "./../../src/load.c"
+    ],
+    "directory": "/home/pc/jiajia/lib/linux",
+    "file": "/home/pc/jiajia/src/load.c",
+    "output": "/home/pc/jiajia/lib/linux/load.o"
+  }
+]

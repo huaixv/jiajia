@@ -2,7 +2,7 @@
 # Application specific rules and defines...
 #*********************************************************
 
-CPPFLAGS = -I../../../src -O2 -DMEDIUM
+CPPFLAGS = -I../../../src -O2 -DSAMPLE -g
 
 OBJS 	= is.o
 VPATH = ../src 

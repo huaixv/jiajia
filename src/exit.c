@@ -56,6 +56,7 @@ int statcnt = 0;
 volatile int waitstat;
 
 void statserver(jia_msg_t *rep) {
+  // // jprintf("\n");
   int i;
   jia_msg_t *grant;
   jiastat_t *stat;
@@ -137,6 +138,7 @@ void statserver(jia_msg_t *rep) {
 }
 
 void statgrantserver(jia_msg_t *req) {
+  // // jprintf("\n");
   assert((req->op == STATGRANT) && (req->topid == jia_pid),
          "Incorrect STATGRANT Message!");
 
@@ -414,6 +416,7 @@ void jia_exit() {
       printf("\n");
     }
   }
+  exit(0);
 #endif /* DOSTAT */
 }
 #else  /* NULL_LIB */

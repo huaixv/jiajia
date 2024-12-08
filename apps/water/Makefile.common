@@ -2,7 +2,7 @@
 # Application specific rules and defines...
 #*********************************************************
 
-CPPFLAGS = -I../../../src -O2
+CPPFLAGS = -I../../../src -O2 -g
 
 OBJS 	= water.o bndry.o cnstnt.o cshift.o initia.o interf.o intraf.o kineti.o poteng.o predcor.o redsync.o syscns.o 
 VPATH = ../src 

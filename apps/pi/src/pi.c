@@ -38,9 +38,12 @@ int main(int argc,char *argv[])
     }
     mypi = h * sum;
 
-    jia_lock(1);
+    jprintf("mypi=%f\n",mypi);
+    jia_lock(0);
+     jprintf("pa=%f\n",*pa);
      *pa= *pa+mypi;
-    jia_unlock(1);
+     jprintf("pa=%f\n",*pa);
+    jia_unlock(0);
     jia_barrier();
     endt = jia_clock();
 

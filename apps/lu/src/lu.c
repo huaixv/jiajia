@@ -92,7 +92,7 @@ int *proc_bytes;            /* Bytes to malloc per processor to hold blocks
 			       of A*/
 double **last_malloc;       /* Starting point of last block of A */
 
-int test_result = 0;        /* Test result of factorization? */
+int test_result = 1;        /* Test result of factorization? */
 int doprint = 0;            /* Print out matrix values? */
 int dostats = 0;            /* Print out individual processor statistics? */
 

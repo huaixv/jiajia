@@ -78,6 +78,37 @@
 
 #define BCAST 100
 
+static inline const char* strop(int op) {
+  switch (op) {
+    case DIFF: return "DIFF";
+    case DIFFGRANT: return "DIFFGRANT";
+    case GETP: return "GETP";
+    case GETPGRANT: return "GETPGRANT";
+    case ACQ: return "ACQ";
+    case ACQGRANT: return "ACQGRANT";
+    case INVLD: return "INVLD";
+    case BARR: return "BARR";
+    case BARRGRANT: return "BARRGRANT";
+    case REL: return "REL";
+    case WTNT: return "WTNT";
+    case JIAEXIT: return "JIAEXIT";
+    case WAIT: return "WAIT";
+    case WAITGRANT: return "WAITGRANT";
+    case STAT: return "STAT";
+    case STATGRANT: return "STATGRANT";
+    case ERRMSG: return "ERRMSG";
+    case SETCV: return "SETCV";
+    case RESETCV: return "RESETCV";
+    case WAITCV: return "WAITCV";
+    case CVGRANT: return "CVGRANT";
+    case MSGBODY: return "MSGBODY";
+    case MSGTAIL: return "MSGTAIL";
+    case LOADREQ: return "LOADREQ";
+    case LOADGRANT: return "LOADGRANT";
+    default: return "UNKNOWN";
+  }
+}
+
 #define inqh inqueue[inhead]
 #define inqt inqueue[intail]
 #define outqh outqueue[outhead]

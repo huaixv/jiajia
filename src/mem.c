@@ -494,26 +494,34 @@ void sigsegv_handler(int signo, siginfo_t *sip, ucontext_t *uap)
   writefault = ctx->uc_mcontext.gregs[REG_ERR] & 0x2;
 #endif
 
-  sprintf(errstr,
-          "Access shared memory out of range from 0x%x to 0x%x!,"
-          "faultaddr = 0x%x,"
-          "writefault = 0x%x ",
-                       Startaddr,
-          Startaddr + globaladdr, faultaddr, writefault);
-  assert((((unsigned long)faultaddr < (Startaddr + globaladdr)) &&
-          ((unsigned long)faultaddr >= Startaddr)),
-         errstr);
+  if (!(((unsigned long)faultaddr < (Startaddr + globaladdr)) &&
+          ((unsigned long)faultaddr >= Startaddr))) {
+    sprintf(errstr,
+            "Access shared memory out of range from 0x%x to 0x%x!,"
+            "faultaddr = 0x%x,"
+            "writefault = 0x%x ",
+            Startaddr, Startaddr + globaladdr, faultaddr, writefault);
+    assert((((unsigned long)faultaddr < (Startaddr + globaladdr)) &&
+            ((unsigned long)faultaddr >= Startaddr)),
+           errstr);
+
+          }
+
+  // jprintf("Segmentation fault at 0x%x, writefault = %d\n", faultaddr, writefault);
 
   if (homehost(faultaddr) == jia_pid) {
+    // jprintf("\n");
     memprotect((caddr_t)faultaddr, Pagesize, PROT_READ | PROT_WRITE);
     homei = homepage(faultaddr);
     home[homei].wtnt |= 3;
     if ((W_VEC == ON) && (home[homei].wvfull == 0)) {
+    // jprintf("\n");
       newtwin(&(home[homei].twin));
       memcpy(home[homei].twin, home[homei].addr, Pagesize);
     }
 #ifdef DOSTAT
     if (statflag == 1) {
+    // jprintf("\n");
       jiastat.segvLtime += get_usecs() - begin;
       jiastat.kernelflag = 0;
       jiastat.segvLcnt++;
@@ -521,21 +529,25 @@ void sigsegv_handler(int signo, siginfo_t *sip, ucontext_t *uap)
 #endif
 
   } else {
+    // jprintf("\n");
     writefault = (writefault == 0) ? 0 : 1;
     cachei =
         (int)page[((unsigned long)faultaddr - Startaddr) / Pagesize].cachei;
     if (cachei < Cachepages) {
+    // jprintf("\n");
       memprotect((caddr_t)faultaddr, Pagesize, PROT_READ | PROT_WRITE);
       if (!((writefault) && (cache[cachei].state == RO))) {
         getpage(faultaddr, 1);
       }
     } else {
+    // jprintf("\n");
       cachei = findposition(faultaddr);
       memmap((caddr_t)faultaddr, Pagesize, PROT_READ | PROT_WRITE);
       getpage(faultaddr, 0);
     }
 
     if (writefault) {
+    // jprintf("\n");
       cache[cachei].addr = faultaddr;
       cache[cachei].state = RW;
       cache[cachei].wtnt = 1;
@@ -544,6 +556,7 @@ void sigsegv_handler(int signo, siginfo_t *sip, ucontext_t *uap)
         ;
       memcpy(cache[cachei].twin, faultaddr, Pagesize);
     } else {
+    // jprintf("\n");
       cache[cachei].addr = faultaddr;
       cache[cachei].state = RO;
       while (getpwait)
@@ -553,12 +566,14 @@ void sigsegv_handler(int signo, siginfo_t *sip, ucontext_t *uap)
 
 #ifdef DOSTAT
     if (statflag == 1) {
+    // jprintf("\n");
       jiastat.segvRcnt++;
       jiastat.segvRtime += get_usecs() - begin;
       jiastat.kernelflag = 0;
     }
 #endif
   }
+    // jprintf("\n");
 }
 
 void getpage(address_t addr, int flag) {
@@ -574,7 +589,7 @@ void getpage(address_t addr, int flag) {
   req->topid = homeid;
   req->temp = flag; /*0:read request,1:write request*/
   req->size = 0;
-  appendmsg(req, ltos(addr), Intbytes);
+  appendmsg(req, ltos(addr), Ptrbytes);
 
   getpwait = 1;
   asendmsg(req);
@@ -591,6 +606,7 @@ void getpage(address_t addr, int flag) {
 }
 
 void getpserver(jia_msg_t *req) {
+  // jprintf("\n");
   address_t paddr;
   int homei;
   jia_msg_t *rep;
@@ -599,6 +615,9 @@ void getpserver(jia_msg_t *req) {
          "Incorrect GETP Message!");
 
   paddr = (address_t)stol(req->data);
+  // jprintf("getpage=0x%x request from host %d\n", (unsigned long)paddr, req->frompid);
+  // jprintf("the first bytes of paddr is:");
+  // jprintf("%x\n", *(uint64_t*)paddr);
   /*
    printf("getpage=0x%x from host %d\n",(unsigned long) paddr,req->frompid);
   */
@@ -625,9 +644,10 @@ void getpserver(jia_msg_t *req) {
   rep->topid = req->frompid;
   rep->temp = 0;
   rep->size = 0;
-  appendmsg(rep, req->data, Intbytes);
+  appendmsg(rep, &paddr, Ptrbytes);
 
   if ((W_VEC == ON) && (req->temp == 1)) {
+    // jprintf("\n");
     int i;
     for (i = 0; i < Wvbits; i++) {
       if (((home[homei].wtvect[req->frompid]) & (((wtvect_t)1) << i)) != 0) {
@@ -636,6 +656,7 @@ void getpserver(jia_msg_t *req) {
     }
     rep->temp = home[homei].wtvect[req->frompid];
   } else {
+    // jprintf("\n");
     appendmsg(rep, paddr, Pagesize);
     rep->temp = WVFULL;
   }
@@ -652,6 +673,7 @@ void getpserver(jia_msg_t *req) {
 }
 
 void getpgrantserver(jia_msg_t *rep) {
+  // jprintf("\n");
   address_t addr;
   unsigned int datai;
   unsigned long wv;
@@ -663,9 +685,10 @@ void getpgrantserver(jia_msg_t *rep) {
 
   datai = 0;
   addr = (address_t)stol(rep->data + datai);
-  datai += Intbytes;
+  datai += Ptrbytes;
 
   if ((W_VEC == ON) && (wv != WVFULL)) {
+    // jprintf("\n");
     for (i = 0; i < Wvbits; i++) {
       if ((wv & (((wtvect_t)1) << i)) != 0) {
         memcpy(addr + i * Blocksize, rep->data + datai, Blocksize);
@@ -673,6 +696,7 @@ void getpgrantserver(jia_msg_t *rep) {
       }
     }
   } else {
+    // jprintf("\n");
     memcpy(addr, rep->data + datai, Pagesize);
   }
 
@@ -719,6 +743,7 @@ unsigned long s2l(unsigned char *str) {
 }
 
 void diffserver(jia_msg_t *req) {
+  // // jprintf("\n");
   int datai;
   int homei;
   unsigned long pstop, doffset, dsize;
@@ -736,7 +761,7 @@ void diffserver(jia_msg_t *req) {
   datai = 0;
   while (datai < req->size) {
     paddr = s2l(req->data + datai);
-    datai += Intbytes;
+    datai += Ptrbytes;
     wv = WVNULL;
 
     homei = homepage(paddr);
@@ -748,11 +773,14 @@ void diffserver(jia_msg_t *req) {
     if ((home[homei].wtnt & 1) != 1)
       memprotect((caddr_t)paddr, Pagesize, PROT_READ | PROT_WRITE);
 
-    pstop = s2l(req->data + datai) + datai - Intbytes;
+    int diff_size = s2l(req->data + datai);
+    pstop = diff_size + datai - Ptrbytes;
     datai += Intbytes;
+    // // jprintf("diff paddr=0x%x size = %d\n", paddr, diff_size);
     while (datai < pstop) {
       dsize = s2l(req->data + datai) & 0xffff;
       doffset = (s2l(req->data + datai) >> 16) & 0xffff;
+      // // jprintf("diff doffset = %d, dsize = %d\n", doffset, dsize);
       datai += Intbytes;
       memcpy((address_t)(paddr + doffset), req->data + datai, dsize);
       datai += dsize;
@@ -796,19 +824,27 @@ void diffserver(jia_msg_t *req) {
 }
 
 int encodediff(int cachei, unsigned char *diff) {
+  /** Diff format
+   *    addr address_t Ptrbytes
+   *    size int       Intbytes
+   *    diffunit[]
+   *        header int Intbytes
+   *        data   char[]
+   */
   int size;
   int bytei;
-  unsigned long cnt;
-  unsigned long start;
-  unsigned long header;
+  uint32_t cnt;
+  uint32_t start;
+  uint32_t header;
 
 #ifdef DOSTAT
   register unsigned int begin = get_usecs();
 #endif
 
   size = 0;
-  memcpy(diff + size, ltos(cache[cachei].addr), Intbytes);
-  size += Intbytes;
+  memcpy(diff + size, ltos(cache[cachei].addr), Ptrbytes);
+  // jprintf("diff addr = 0x%x\n", cache[cachei].addr);
+  size += Ptrbytes;
   size += Intbytes; /*leave space for size*/
 
   bytei = 0;
@@ -819,8 +855,8 @@ int encodediff(int cachei, unsigned char *diff) {
          bytei += Diffunit)
       ;
     if (bytei < Pagesize) {
-      cnt = (unsigned long)0;
-      start = (unsigned long)bytei;
+      cnt = 0;
+      start = bytei;
       for (; (bytei < Pagesize) &&
              (memcmp(cache[cachei].addr + bytei, cache[cachei].twin + bytei,
                      Diffunit) != 0);
@@ -831,9 +867,11 @@ int encodediff(int cachei, unsigned char *diff) {
       size += Intbytes;
       memcpy(diff + size, cache[cachei].addr + start, cnt);
       size += cnt;
+      // jprintf("diff start = %d, cnt = %d\n", start, cnt);
     }
   }
-  memcpy(diff + Intbytes, ltos(size), Intbytes); /*fill size*/
+  memcpy(diff + Ptrbytes, ltos(size), Intbytes); /*fill size*/
+  // jprintf("diff size = %d\n", size);
 
 #ifdef DOSTAT
   if (statflag == 1) {
@@ -889,6 +927,7 @@ void senddiffs() {
 }
 
 void diffgrantserver(jia_msg_t *rep) {
+  // // jprintf("\n");
   assert((rep->op == DIFFGRANT) && (rep->size == 0),
          "Incorrect returned message!");
 

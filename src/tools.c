@@ -50,7 +50,7 @@ void assert(int, char *);
 void jiaexitserver(jia_msg_t *req);
 jia_msg_t *newmsg();
 void freemsg(jia_msg_t *msg);
-void appendmsg(jia_msg_t *msg, unsigned char *str, int len);
+void doappendmsg(jia_msg_t *msg, unsigned char *str, int len);
 void printmsg(jia_msg_t *msg, int right);
 void printstack(int ptr);
 unsigned long jia_current_time();
@@ -97,8 +97,9 @@ void inittools() {
 void assert0(int cond, char *amsg) {
 
   if (!cond) {
-    fprintf(stderr, "Assert0 error from host %d --- %s\n", jia_pid, amsg);
+    // // jprintf("Assert0 error from host %d --- %s\n", jia_pid, amsg);
     perror("Unix Error");
+    print_trace();
     fflush(stderr);
     fflush(stdout);
     exit(-1);
@@ -110,6 +111,7 @@ void assert(int cond, char *amsg) {
   int hosti;
 
   if (!cond) {
+    // // jprintf("assert failed: %s\n", amsg);
     assertmsg.op = JIAEXIT;
     assertmsg.frompid = jia_pid;
     memcpy(assertmsg.data, amsg, strlen(amsg));
@@ -127,6 +129,7 @@ void assert(int cond, char *amsg) {
 
 /*-----------------------------------------------------------*/
 void jiaexitserver(jia_msg_t *req) {
+  // // jprintf("\n");
   printf("Assert error from host %d --- %s\n", req->frompid, (char *)req->data);
   fflush(stderr);
   fflush(stdout);
@@ -175,7 +178,7 @@ void freemsg(jia_msg_t *msg) {
 }
 
 /*-----------------------------------------------------------*/
-void appendmsg(jia_msg_t *msg, unsigned char *str, int len) {
+void doappendmsg(jia_msg_t *msg, unsigned char *str, int len) {
   assert(((msg->size + len) <= Maxmsgsize), "Message too large");
   memcpy(msg->data + msg->size, str, len);
   msg->size += len;
@@ -211,6 +214,7 @@ void freewtntspace(wtnt_t *ptr) {
 
 /*-----------------------------------------------------------*/
 void printmsg(jia_msg_t *msg, int right) {
+  // // jprintf("\n");
 
   SPACE(right);
   printf("********Print message********\n");

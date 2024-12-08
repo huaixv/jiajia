@@ -234,11 +234,27 @@ int startprocs(int argc, char **argv) {
   assert0((Startport != -1), "getpid() error");
   Startport = 10000 + (Startport * Maxhosts * Maxhosts * 4) % 20000;
 
+
+  char *argv_dup = strdup(argv[0]);
+  char *prog_name = basename(argv_dup);
+
 #ifdef LINUX
   for (hosti = 1; hosti < hostc; hosti++) {
 #ifdef NFS
     sprintf(cmd, "cd %s; %s", pwd, pwd);
 #else
+
+    cmd[0] = '\0';
+    strcat(cmd, "rsh -l ");
+    strcat(cmd, hosts[hosti].user);
+    hostname = hosts[hosti].name;
+    strcat(cmd, " ");
+    strcat(cmd, hostname);
+    strcat(cmd, " ");
+    strcat(cmd, "pkill ");
+    strcat(cmd, prog_name);
+    system(cmd);
+
     cmd[0] = '\0';
     strcat(cmd, "rsh -l ");
     strcat(cmd, hosts[hosti].user);
@@ -248,8 +264,6 @@ int startprocs(int argc, char **argv) {
     strcat(cmd, hostname);
     strcat(cmd, " ");
     for (i = 0; i < argc; i++) {
-      char *argv_dup = strdup(argv[i]);
-      char *prog_name = basename(argv_dup);
       strcat(cmd, "./");
       strcat(cmd, prog_name);
       strcat(cmd, " ");
@@ -413,7 +427,7 @@ void jia_init(int argc, char **argv) {
   jia_lock_index = 0;
   jiacreat(argc, argv);
 #if defined SOLARIS || defined LINUX
-  sleep(2);
+  // sleep(2);
   rl.rlim_cur = Maxfileno;
   rl.rlim_max = Maxfileno;
   setrlimit(RLIMIT_NOFILE, &rl);
@@ -422,6 +436,7 @@ void jia_init(int argc, char **argv) {
   rl.rlim_cur = Maxmemsize;
   rl.rlim_max = Maxmemsize;
   setrlimit(RLIMIT_DATA, &rl);
+  redirstdio(argc, argv);
 
   initmem();
   initsyn();
@@ -436,9 +451,8 @@ void jia_init(int argc, char **argv) {
 #ifndef LINUX
   barrier0();
 #else
-  sleep(2);
+  // sleep(2);
 #endif
-  redirstdio(argc, argv);
   enable_sigio();
 
   timel = jia_current_time();

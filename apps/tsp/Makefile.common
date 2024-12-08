@@ -2,7 +2,7 @@
 # Application specific rules and defines...
 #*********************************************************
 
-CPPFLAGS = -I../../../src -O2
+CPPFLAGS = -I../../../src -O2 -g
 
 OBJS 	= pq.o solve.o tours.o tsp.o read_tsp.o
 VPATH = ../src 

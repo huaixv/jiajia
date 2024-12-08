@@ -38,6 +38,8 @@
 #ifndef JIA_PUBLIC
 #define JIA_PUBLIC
 
+#include "jdebug.h"
+
 #define jiahosts hostc
 #define jiapid jia_pid
 

@@ -58,7 +58,14 @@ extern void addwtvect(int homei, wtvect_t wv, int from);
 
 void initsyn();
 void clearlocks();
-void savewtnt(wtnt_t *ptr, address_t addr, int frompid);
+#define savewtnt(ptr, addr, frompid)                                           \
+  do {                                                                         \
+    dosavewtnt(ptr, addr, frompid);                                            \
+  } while (0)
+
+// // jprintf("savewtnt: ptr = %p, addr = %p, frompid = %d\n", ptr, addr, frompid);
+
+void dosavewtnt(wtnt_t *ptr, address_t addr, int frompid);
 void savepage(int cachei);
 void endinterval(int);
 void startinterval(int);
@@ -239,6 +246,7 @@ void jia_unlock(int lock) {
   endinterval(REL);
 
   sendwtnts(REL);
+  // jprintf("sending rel\n");
 
   startinterval(REL);
 
@@ -267,6 +275,7 @@ void jia_barrier() {
   if (hostc == 1)
     return;
 
+  jprintf("\n");
   if (LOAD_BAL == ON) {
     endtime = jia_clock();
     caltime += (endtime - starttime);
@@ -274,30 +283,40 @@ void jia_barrier() {
 
   assert((stackptr == 0), "barrier can not be used in CS!");
 
+  jprintf("\n");
+
   endinterval(BARR);
 
+  jprintf("\n");
   if (H_MIG == ON) {
     migcheckcache();
   }
 
+  jprintf("\n");
   barrwait = 1;
   sendwtnts(BARR);
 
+  jprintf("\n");
   freewtntspace(top.wtntp);
 
+  jprintf("\n");
   while (barrwait)
     ;
 
+  jprintf("\n");
   if ((H_MIG == ON) && (W_VEC == ON)) {
     jia_wait();
   }
 
+  jprintf("\n");
   startinterval(BARR);
 
+  jprintf("\n");
   if (LOAD_BAL == ON)
     starttime = jia_clock();
 
 #ifdef DOSTAT
+  jprintf("\n");
   if (statflag == 1) {
     jiastat.barrtime += get_usecs() - begin;
     jiastat.kernelflag = 0;
@@ -306,12 +325,15 @@ void jia_barrier() {
 }
 
 void endinterval(int synop) {
+
+  // jprintf("\n");
   register int cachei;
   register int pagei;
   register int hpages;
 
   for (cachei = 0; cachei < Cachepages; cachei++) {
     if (cache[cachei].wtnt == 1) {
+      // jprintf("save cache %d\n", cachei);
       savepage(cachei);
     }
   }
@@ -346,6 +368,7 @@ void endinterval(int synop) {
 }
 
 void startinterval(int synop) {
+      // jprintf("\n");
   register int cachei;
   register int pagei;
   register int hpages;
@@ -353,6 +376,7 @@ void startinterval(int synop) {
 
   for (cachei = 0; cachei < Cachepages; cachei++) {
     if (cache[cachei].wtnt == 1) {
+      // jprintf("\n");
       cache[cachei].wtnt = 0;
       memprotect((caddr_t)cache[cachei].addr, Pagesize, PROT_READ);
       cache[cachei].state = RO;
@@ -369,6 +393,7 @@ void startinterval(int synop) {
       }
   } else {
     for (pagei = 0; pagei < hpages; pagei++)
+      // jprintf("\n");
       switch (home[pagei].wtnt & 7) {
       case 0: /*000, written by no one in last barr itvl*/
         break;
@@ -378,6 +403,7 @@ void startinterval(int synop) {
         break;
       case 2: /*010, written by only home host in last barr itvl, the page is
                  RO*/
+        // jprintf("\n");
         swcnt = (home[pagei].wtnt >> 4) & 0xf;
         swcnt++;
         if (swcnt >= SWvalve) {
@@ -394,6 +420,7 @@ void startinterval(int synop) {
         break;
       case 3: /*011, written by only home host in last barr itvl, the page is
                  RW*/
+        // jprintf("\n");
         swcnt = (home[pagei].wtnt >> 4) & 0xf;
         swcnt++;
         if (swcnt >= SWvalve) {
@@ -409,10 +436,12 @@ void startinterval(int synop) {
       case 4: /*100, written by only remote host in last barr itvl*/
       case 6: /*110, written by home and remote host in last barr itvl, the page
                  is RO*/
+        // jprintf("\n");
         home[pagei].wtnt = 0;
         break;
       case 7: /*111, written by home and remote host in last barr itvl, the page
                  is RW*/
+        // jprintf("\n");
         home[pagei].wtnt = 0;
         memprotect((caddr_t)home[pagei].addr, Pagesize, PROT_READ);
         break;
@@ -453,6 +482,7 @@ void acquire(int lock) {
 
   req = newmsg();
 
+  // jprintf("\n");
   req->op = ACQ;
   req->frompid = jia_pid;
   req->topid = lock % hostc;
@@ -461,6 +491,8 @@ void acquire(int lock) {
   appendmsg(req, ltos(lock), Intbytes);
 
   asendmsg(req);
+  // jprintf("op = %s, frompid = %d, topid = %d, scope = %d, size = %d\n", strop(req->op),
+          // req->frompid, req->topid, req->scope, req->size);
 
   freemsg(req);
   while (acqwait)
@@ -501,7 +533,7 @@ void savepage(int cachei) {
   savewtnt(top.wtntp, cache[cachei].addr, Maxhosts);
 }
 
-void savewtnt(wtnt_t *ptr, address_t addr, int frompid) {
+void dosavewtnt(wtnt_t *ptr, address_t addr, int frompid) {
   int wtnti;
   int exist;
   wtnt_t *wnptr;
@@ -529,6 +561,7 @@ void savewtnt(wtnt_t *ptr, address_t addr, int frompid) {
     }
     wnptr->wtnts[wnptr->wtntc] = addr;
     wnptr->from[wnptr->wtntc] = frompid;
+    // // jprintf("wtnt %d from %d\n", addr, frompid);
     wnptr->wtntc++;
   } else {
     if (ptr == locks[hidelock].wtntp) { /*barrier*/
@@ -547,8 +580,8 @@ wtnt_t *appendstackwtnts(jia_msg_t *msg, wtnt_t *ptr) {
   full = 0;
   wnptr = ptr;
   while ((wnptr != WNULL) && (full == 0)) {
-    if ((msg->size + (wnptr->wtntc * Intbytes)) < Maxmsgsize) {
-      appendmsg(msg, wnptr->wtnts, (wnptr->wtntc * Intbytes));
+    if ((msg->size + (wnptr->wtntc * Ptrbytes)) < Maxmsgsize) {
+      appendmsg(msg, wnptr->wtnts, (wnptr->wtntc * Ptrbytes));
       wnptr = wnptr->more;
     } else {
       full = 1;
@@ -565,11 +598,11 @@ wtnt_t *appendlockwtnts(jia_msg_t *msg, wtnt_t *ptr, int acqscope) {
   full = 0;
   wnptr = ptr;
   while ((wnptr != WNULL) && (full == 0)) {
-    if ((msg->size + (wnptr->wtntc * Intbytes)) < Maxmsgsize) {
+    if ((msg->size + (wnptr->wtntc * Ptrbytes)) < Maxmsgsize) {
       for (wtnti = 0; wtnti < wnptr->wtntc; wtnti++)
         if ((wnptr->from[wtnti] > acqscope) &&
             (homehost(wnptr->wtnts[wtnti]) != msg->topid))
-          appendmsg(msg, ltos(wnptr->wtnts[wtnti]), Intbytes);
+          appendmsg(msg, ltos(wnptr->wtnts[wtnti]), Ptrbytes);
       wnptr = wnptr->more;
     } else {
       full = 1;
@@ -611,6 +644,9 @@ void acqserver(jia_msg_t *req) {
   int wtnti;
 
   assert((req->op == ACQ) && (req->topid == jia_pid), "Incorrect ACQ message!");
+  // jprintf("\n");
+  // jprintf("op = %s, topid = %d, frompid = %d, scope = %d\n", strop(req->op),
+          // req->topid, req->frompid, req->scope);
 
   lock = (int)stol(req->data);
   assert((lock % hostc == jia_pid), "Incorrect home of lock!");
@@ -624,10 +660,13 @@ void acqserver(jia_msg_t *req) {
 }
 
 void relserver(jia_msg_t *req) {
+  // jprintf("\n");
   int lock;
   int acqi;
 
   assert((req->op == REL) && (req->topid == jia_pid), "Incorrect REL Message!");
+  // jprintf("op = %s, topid = %d, frompid = %d, scope = %d\n", strop(req->op),
+          // req->topid, req->frompid, req->scope);
 
   lock = (int)stol(req->data);
   assert((lock % hostc == jia_pid), "Incorrect home of lock!");
@@ -655,13 +694,15 @@ wtnt_t *appendbarrwtnts(jia_msg_t *msg, wtnt_t *ptr) {
   int full;
   wtnt_t *wnptr;
 
+  // // jprintf("\n");
   full = 0;
   wnptr = ptr;
   while ((wnptr != WNULL) && (full == 0)) {
-    if ((msg->size + (wnptr->wtntc * Intbytes * 2)) < Maxmsgsize) {
+    if ((msg->size + (wnptr->wtntc * (Ptrbytes + Intbytes))) < Maxmsgsize) {
       for (wtnti = 0; wtnti < wnptr->wtntc; wtnti++) {
-        appendmsg(msg, ltos(wnptr->wtnts[wtnti]), Intbytes);
+        appendmsg(msg, ltos(wnptr->wtnts[wtnti]), Ptrbytes);
         appendmsg(msg, ltos(wnptr->from[wtnti]), Intbytes);
+        // // jprintf("wtnts: 0x%x, from: %d\n", wnptr->wtnts[wtnti], wnptr->from[wtnti]);
       }
       wnptr = wnptr->more;
     } else {
@@ -746,17 +787,18 @@ void recordwtnts(jia_msg_t *req) {
 
   lock = (int)stol(req->data);
   if (lock != hidelock) { /*lock*/
-    for (datai = Intbytes; datai < req->size; datai += Intbytes)
+    for (datai = Intbytes; datai < req->size; datai += Ptrbytes)
       savewtnt(locks[lock].wtntp, (address_t)stol(req->data + datai),
                locks[lock].scope);
   } else { /*barrier*/
-    for (datai = Intbytes; datai < req->size; datai += Intbytes)
+    for (datai = Intbytes; datai < req->size; datai += Ptrbytes)
       savewtnt(locks[lock].wtntp, (address_t)stol(req->data + datai),
                req->frompid);
   }
 }
 
 void wtntserver(jia_msg_t *req) {
+  // // jprintf("\n");
   int lock;
 
   assert((req->op == WTNT) && (req->topid == jia_pid),
@@ -913,7 +955,7 @@ void invalidate(jia_msg_t *req) {
       migtag = ((unsigned long)addr) % Pagesize;
       addr = (address_t)(((unsigned long)addr / Pagesize) * Pagesize);
     }
-    datai += Intbytes;
+    datai += Ptrbytes;
 
     if (lock == hidelock) { /*Barrier*/
       from = (int)stol(req->data + datai);
@@ -921,6 +963,7 @@ void invalidate(jia_msg_t *req) {
     } else { /*Lock*/
       from = Maxhosts;
     }
+    // // jprintf("Invalidate 0x%x from host %d\n", addr, from);
 
     if ((from != jia_pid) && (homehost(addr) != jia_pid)) {
       cachei = (int)page[((unsigned long)addr - Startaddr) / Pagesize].cachei;
@@ -955,6 +998,7 @@ void invalidate(jia_msg_t *req) {
 }
 
 void invserver(jia_msg_t *req) {
+  // // jprintf("\n");
   assert((req->op == INVLD) && (req->topid == jia_pid),
          "Incorrect INVLD Message!");
 
@@ -962,6 +1006,7 @@ void invserver(jia_msg_t *req) {
 }
 
 void barrgrantserver(jia_msg_t *req) {
+  // // jprintf("\n");
   int lock;
 
   assert((req->op == BARRGRANT) && (req->topid == jia_pid),
@@ -982,6 +1027,7 @@ void barrgrantserver(jia_msg_t *req) {
 }
 
 void acqgrantserver(jia_msg_t *req) {
+  // // jprintf("\n");
   int lock;
 
   assert((req->op == ACQGRANT) && (req->topid == jia_pid),
@@ -1091,6 +1137,7 @@ void jia_wait() {
 }
 
 void waitserver(jia_msg_t *req) {
+  // // jprintf("\n");
   jia_msg_t *grant;
   int i;
 
@@ -1111,6 +1158,7 @@ void waitserver(jia_msg_t *req) {
 }
 
 void waitgrantserver(jia_msg_t *req) {
+  // // jprintf("\n");
   assert((req->op == WAITGRANT) && (req->topid == jia_pid),
          "Incorrect WAITGRANT Message!");
 
@@ -1133,6 +1181,7 @@ void grantcondv(int condv, int toproc) {
 }
 
 void setcvserver(jia_msg_t *req) {
+  // // jprintf("\n");
   int condv;
   int i;
 
@@ -1152,6 +1201,7 @@ void setcvserver(jia_msg_t *req) {
 }
 
 void resetcvserver(jia_msg_t *req) {
+  // // jprintf("\n");
   int condv;
 
   assert((req->op == RESETCV) && (req->topid == jia_pid),
@@ -1161,6 +1211,7 @@ void resetcvserver(jia_msg_t *req) {
 }
 
 void waitcvserver(jia_msg_t *req) {
+  // // jprintf("\n");
   int condv;
   int i;
 
@@ -1180,6 +1231,7 @@ void waitcvserver(jia_msg_t *req) {
 }
 
 void cvgrantserver(jia_msg_t *req) {
+  // // jprintf("\n");
   int condv;
 
   assert((req->op == CVGRANT) && (req->topid == jia_pid),
